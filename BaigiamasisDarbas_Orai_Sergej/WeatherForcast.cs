@@ -8,20 +8,29 @@ namespace BaigiamasisDarbas_Orai_Sergej
 {
     public class WeatherForcast
     {
-        public city city { get; set; }
+       // public city city { get; set; }
         public List<list> list { get; set; } //numatomu oru prognozes sarašas
-    }
-
-    public class temp
-    {
-        public double day { get; set; }
-       
     }
 
     public class weather
     {
         public string  main { get; set; }
         public string  description { get; set; }
+        public string  icon { get; set; }
+
+    }
+
+    public class main
+    {
+        public double temp { get; set; }
+        public double humidity { get; set; }
+        public double pressure { get; set; }
+
+    }
+
+    public class wind
+    {
+        public double speed { get; set; }
     }
 
     public class city
@@ -31,12 +40,12 @@ namespace BaigiamasisDarbas_Orai_Sergej
 
     public class list
     {
-        public double dt { get; set; } //diena milisiekundiem
-        public double pressure { get; set; } // spaudimas hPa
-        public double humidity { get; set; } //driegnumas %
-        public double speed { get; set; } //vėjo greitis km/h
-        public temp temp { get; set; } //oro temperatura
+        public double dt { get; set; } //diena milisekundem
         public List<weather> weather { get; set; } //oru sarašas
+        public main main { get; set; } //
+        public wind wind { get; set; } //
+        public city city { get; set; }
+        public string dt_txt { get; set; }
 
     }
 }

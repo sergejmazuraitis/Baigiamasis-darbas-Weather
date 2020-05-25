@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BaigiamasisDarbas_Orai_Sergej
 {
-    class WeatherInfo
+     class WeatherInfo
     {
         public class coord
         {
@@ -20,6 +20,7 @@ namespace BaigiamasisDarbas_Orai_Sergej
             public int id { get; set; }
             public string main { get; set; }
             public string description { get; set; }
+            public string icon { get; set; }
         }
 
         public class main
@@ -37,6 +38,8 @@ namespace BaigiamasisDarbas_Orai_Sergej
         public class sys
         {
             public string country { get; set; }
+            public double sunrise { get; set; }
+            public double sunset { get; set; }
         }
 
         public class root
@@ -46,7 +49,7 @@ namespace BaigiamasisDarbas_Orai_Sergej
             public double dt { get; set; }
             public wind wind { get; set; }
             public main main { get; set; }
-            public List<weather> weatherList { get; set; }
+            public List<weather> weather { get; set; }
             public coord coordinate { get; set; }
 
         }
