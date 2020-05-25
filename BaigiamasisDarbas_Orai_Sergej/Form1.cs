@@ -17,6 +17,7 @@ using System.CodeDom;
 using System.Net.Http;
 using System.Data.SqlClient;
 using System.Data.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BaigiamasisDarbas_Orai_Sergej
 {
@@ -25,6 +26,15 @@ namespace BaigiamasisDarbas_Orai_Sergej
         const string APPID = "5ccd79b8f77ca0ae8636212e47a38db0";
         string cityName = "";
         string IconChangeVar = null;
+        double SunriseNow = 0;
+        double SunsetNow = 0;
+        double TimeNow = 0;
+        string DayNight2 = null;
+        string DayNight3 = null;
+        string DayNight4 = null;
+        string DayNight5 = null;
+
+
         public Form1()
         {
             InitializeComponent();
@@ -52,7 +62,7 @@ namespace BaigiamasisDarbas_Orai_Sergej
 
                 string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Pc\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
                 SqlConnection sql = new SqlConnection(connectionString);
-                string querry = "SELECT TOP 1 * FROM IconsTable order by Id DESC";
+                string querry = "SELECT TOP 1 * FROM IconsTable";
                 SqlCommand command = new SqlCommand(querry, sql);
                 sql.Open();
                 SqlDataReader takeIcon = command.ExecuteReader();
@@ -63,6 +73,10 @@ namespace BaigiamasisDarbas_Orai_Sergej
                     IconChangeVar = iconsTable.Icons;
                 }
                 sql.Close();
+
+                SunriseNow = outPut.sys.sunrise;
+                SunsetNow = outPut.sys.sunset;
+                TimeNow = outPut.dt;
 
 
                 if (IconChangeVar == null)
@@ -79,24 +93,23 @@ namespace BaigiamasisDarbas_Orai_Sergej
                             pictureBox1.Image = Bitmap.FromStream(str1);
                         }
                     }
-                    if (outPut.dt >= outPut.sys.sunrise)
-                    {
-                        BackgroundImage = Properties.Resources.day;
-                    }
-                    else if (outPut.dt >= outPut.sys.sunset)
-                    {
-                        BackgroundImage = Properties.Resources.night;
-                    }
-                    else
-                    {
-                        BackgroundImage = Properties.Resources.na;
-                    }
 
                 }
                 else
                 {
                     ChangeIcon1();
                 }
+
+                if (outPut.dt >= outPut.sys.sunrise && outPut.dt <= outPut.sys.sunset)
+                {
+                    BackgroundImage = Properties.Resources.day;
+                }
+                else
+                {
+                    BackgroundImage = Properties.Resources.night;
+                }
+
+
             }
 
         }
@@ -110,6 +123,13 @@ namespace BaigiamasisDarbas_Orai_Sergej
                 var Object = JsonConvert.DeserializeObject<WeatherForcast>(json);
 
                 WeatherForcast forcast = Object;
+
+                DayNight2 = forcast.list[0].sys.pod;
+                DayNight3 = forcast.list[3].sys.pod;
+                DayNight4 = forcast.list[6].sys.pod;
+                DayNight5 = forcast.list[9].sys.pod;
+
+
 
                 lbl_Days2.Text = string.Format("{0}", forcast.list[0].dt_txt);
                 lbl_Conditions2.Text = string.Format("{0}", forcast.list[0].weather[0].main); //oro būsena
@@ -142,7 +162,7 @@ namespace BaigiamasisDarbas_Orai_Sergej
 
                 string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Pc\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
                 SqlConnection sql = new SqlConnection(connectionString);
-                string querry = "SELECT TOP 1 * FROM IconsTable order by Id DESC";
+                string querry = "SELECT TOP 1 * FROM IconsTable";
                 SqlCommand command = new SqlCommand(querry, sql);
                 sql.Open();
                 SqlDataReader takeIcon = command.ExecuteReader();
@@ -216,7 +236,6 @@ namespace BaigiamasisDarbas_Orai_Sergej
                     ChangeIcon4();
                     ChangeIcon5();
                 }
-
             }
         }
 
@@ -226,10 +245,53 @@ namespace BaigiamasisDarbas_Orai_Sergej
             switch (lbl_Conditions1.Text)
             {
                 case "Clear":
-                    pictureBox1.Image = Properties.Resources.clear_sky;
+                    if (TimeNow >= SunriseNow && TimeNow <= SunsetNow)
+                    {
+                        pictureBox1.Image = Properties.Resources.clear_sky;
+                    }
+                    else
+                    {
+                        pictureBox1.Image = Properties.Resources.night_clear_sky;
+
+                    }
+
                     break;
                 case "Clouds":
-                    pictureBox1.Image = Properties.Resources.scattered_clouds;
+                    if (TimeNow >= SunriseNow && TimeNow <= SunsetNow)
+                    {
+                        if (lbl_Description1.Text == "few clouds")
+                        {
+                            pictureBox1.Image = Properties.Resources.few_clouds;
+                        }
+                        if (lbl_Description1.Text == "scattered clouds")
+                        {
+                            pictureBox1.Image = Properties.Resources.scattered_clouds;
+
+                        }
+                        else
+                        {
+                            pictureBox1.Image = Properties.Resources.broken_clouds;
+
+                        }
+
+                    }
+                    else
+                    {
+                        if (lbl_Description1.Text == "few clouds")
+                        {
+                            pictureBox1.Image = Properties.Resources.night_few_clouds;
+                        }
+                        if (lbl_Description1.Text == "scattered clouds")
+                        {
+                            pictureBox1.Image = Properties.Resources.scattered_clouds;
+
+                        }
+                        else
+                        {
+                            pictureBox1.Image = Properties.Resources.broken_clouds;
+
+                        }
+                    }
                     break;
                 case "Rain":
                     if (lbl_Description1.Text == "light intensity shower rain" || lbl_Description1.Text == "shower rain" || lbl_Description1.Text == "heavy intensity shower rain" || lbl_Description1.Text == "ragged shower rain")
@@ -242,7 +304,14 @@ namespace BaigiamasisDarbas_Orai_Sergej
                     }
                     else
                     {
-                        pictureBox1.Image = Properties.Resources.rain;
+                        if (TimeNow >= SunriseNow && TimeNow <= SunsetNow)
+                        {
+                            pictureBox1.Image = Properties.Resources.rain;
+                        }
+                        else
+                        {
+                            pictureBox1.Image = Properties.Resources.night_rain;
+                        }
                     }
                     break;
                 case "Thunderstorm ":
@@ -266,10 +335,53 @@ namespace BaigiamasisDarbas_Orai_Sergej
             switch (lbl_Conditions2.Text)
             {
                 case "Clear":
-                    pictureBox2.Image = Properties.Resources.clear_sky;
+                    if (DayNight2 == "d")
+                    {
+                        pictureBox2.Image = Properties.Resources.clear_sky;
+                    }
+                    else
+                    {
+                        pictureBox2.Image = Properties.Resources.night_clear_sky;
+
+                    }
+
                     break;
                 case "Clouds":
-                    pictureBox2.Image = Properties.Resources.scattered_clouds;
+                    if (DayNight2 == "d")
+                    {
+                        if (lbl_Description2.Text == "few clouds")
+                        {
+                            pictureBox2.Image = Properties.Resources.few_clouds;
+                        }
+                        if (lbl_Description2.Text == "scattered clouds")
+                        {
+                            pictureBox2.Image = Properties.Resources.scattered_clouds;
+
+                        }
+                        else
+                        {
+                            pictureBox2.Image = Properties.Resources.broken_clouds;
+
+                        }
+
+                    }
+                    else
+                    {
+                        if (lbl_Description2.Text == "few clouds")
+                        {
+                            pictureBox2.Image = Properties.Resources.night_few_clouds;
+                        }
+                        if (lbl_Description2.Text == "scattered clouds")
+                        {
+                            pictureBox2.Image = Properties.Resources.scattered_clouds;
+
+                        }
+                        else
+                        {
+                            pictureBox2.Image = Properties.Resources.broken_clouds;
+
+                        }
+                    }
                     break;
                 case "Rain":
                     if (lbl_Description2.Text == "light intensity shower rain" || lbl_Description2.Text == "shower rain" || lbl_Description2.Text == "heavy intensity shower rain" || lbl_Description2.Text == "ragged shower rain")
@@ -282,7 +394,14 @@ namespace BaigiamasisDarbas_Orai_Sergej
                     }
                     else
                     {
-                        pictureBox2.Image = Properties.Resources.rain;
+                        if (DayNight2 == "d")
+                        {
+                            pictureBox2.Image = Properties.Resources.rain;
+                        }
+                        else
+                        {
+                            pictureBox2.Image = Properties.Resources.night_rain;
+                        }
                     }
                     break;
                 case "Thunderstorm ":
@@ -306,10 +425,53 @@ namespace BaigiamasisDarbas_Orai_Sergej
             switch (lbl_Conditions3.Text)
             {
                 case "Clear":
-                    pictureBox3.Image = Properties.Resources.clear_sky;
+                    if (DayNight3 == "d")
+                    {
+                        pictureBox3.Image = Properties.Resources.clear_sky;
+                    }
+                    else
+                    {
+                        pictureBox3.Image = Properties.Resources.night_clear_sky;
+
+                    }
+
                     break;
                 case "Clouds":
-                    pictureBox3.Image = Properties.Resources.scattered_clouds;
+                    if (DayNight3 == "d")
+                    {
+                        if (lbl_Description3.Text == "few clouds")
+                        {
+                            pictureBox3.Image = Properties.Resources.few_clouds;
+                        }
+                        if (lbl_Description3.Text == "scattered clouds")
+                        {
+                            pictureBox3.Image = Properties.Resources.scattered_clouds;
+
+                        }
+                        else
+                        {
+                            pictureBox3.Image = Properties.Resources.broken_clouds;
+
+                        }
+
+                    }
+                    else
+                    {
+                        if (lbl_Description3.Text == "few clouds")
+                        {
+                            pictureBox3.Image = Properties.Resources.night_few_clouds;
+                        }
+                        if (lbl_Description3.Text == "scattered clouds")
+                        {
+                            pictureBox3.Image = Properties.Resources.scattered_clouds;
+
+                        }
+                        else
+                        {
+                            pictureBox3.Image = Properties.Resources.broken_clouds;
+
+                        }
+                    }
                     break;
                 case "Rain":
                     if (lbl_Description3.Text == "light intensity shower rain" || lbl_Description3.Text == "shower rain" || lbl_Description3.Text == "heavy intensity shower rain" || lbl_Description3.Text == "ragged shower rain")
@@ -322,7 +484,14 @@ namespace BaigiamasisDarbas_Orai_Sergej
                     }
                     else
                     {
-                        pictureBox3.Image = Properties.Resources.rain;
+                        if (DayNight3 == "d")
+                        {
+                            pictureBox3.Image = Properties.Resources.rain;
+                        }
+                        else
+                        {
+                            pictureBox3.Image = Properties.Resources.night_rain;
+                        }
                     }
                     break;
                 case "Thunderstorm ":
@@ -346,10 +515,53 @@ namespace BaigiamasisDarbas_Orai_Sergej
             switch (lbl_Conditions4.Text)
             {
                 case "Clear":
-                    pictureBox4.Image = Properties.Resources.clear_sky;
+                    if (DayNight4 == "d")
+                    {
+                        pictureBox4.Image = Properties.Resources.clear_sky;
+                    }
+                    else
+                    {
+                        pictureBox4.Image = Properties.Resources.night_clear_sky;
+
+                    }
+
                     break;
                 case "Clouds":
-                    pictureBox4.Image = Properties.Resources.scattered_clouds;
+                    if (DayNight4 == "d")
+                    {
+                        if (lbl_Description4.Text == "few clouds")
+                        {
+                            pictureBox4.Image = Properties.Resources.few_clouds;
+                        }
+                        if (lbl_Description4.Text == "scattered clouds")
+                        {
+                            pictureBox4.Image = Properties.Resources.scattered_clouds;
+
+                        }
+                        else
+                        {
+                            pictureBox4.Image = Properties.Resources.broken_clouds;
+
+                        }
+
+                    }
+                    else
+                    {
+                        if (lbl_Description4.Text == "few clouds")
+                        {
+                            pictureBox4.Image = Properties.Resources.night_few_clouds;
+                        }
+                        if (lbl_Description4.Text == "scattered clouds")
+                        {
+                            pictureBox4.Image = Properties.Resources.scattered_clouds;
+
+                        }
+                        else
+                        {
+                            pictureBox4.Image = Properties.Resources.broken_clouds;
+
+                        }
+                    }
                     break;
                 case "Rain":
                     if (lbl_Description4.Text == "light intensity shower rain" || lbl_Description4.Text == "shower rain" || lbl_Description4.Text == "heavy intensity shower rain" || lbl_Description4.Text == "ragged shower rain")
@@ -362,7 +574,14 @@ namespace BaigiamasisDarbas_Orai_Sergej
                     }
                     else
                     {
-                        pictureBox4.Image = Properties.Resources.rain;
+                        if (DayNight4 == "d")
+                        {
+                            pictureBox4.Image = Properties.Resources.rain;
+                        }
+                        else
+                        {
+                            pictureBox4.Image = Properties.Resources.night_rain;
+                        }
                     }
                     break;
                 case "Thunderstorm ":
@@ -386,15 +605,58 @@ namespace BaigiamasisDarbas_Orai_Sergej
             switch (lbl_Conditions5.Text)
             {
                 case "Clear":
-                    pictureBox5.Image = Properties.Resources.clear_sky;
+                    if (DayNight5 == "d")
+                    {
+                        pictureBox5.Image = Properties.Resources.clear_sky;
+                    }
+                    else
+                    {
+                        pictureBox5.Image = Properties.Resources.night_clear_sky;
+
+                    }
+
                     break;
                 case "Clouds":
-                    pictureBox5.Image = Properties.Resources.scattered_clouds;
+                    if (DayNight4 == "d")
+                    {
+                        if (lbl_Description5.Text == "few clouds")
+                        {
+                            pictureBox5.Image = Properties.Resources.few_clouds;
+                        }
+                        if (lbl_Description5.Text == "scattered clouds")
+                        {
+                            pictureBox5.Image = Properties.Resources.scattered_clouds;
+
+                        }
+                        else
+                        {
+                            pictureBox5.Image = Properties.Resources.broken_clouds;
+
+                        }
+
+                    }
+                    else
+                    {
+                        if (lbl_Description5.Text == "few clouds")
+                        {
+                            pictureBox5.Image = Properties.Resources.night_few_clouds;
+                        }
+                        if (lbl_Description5.Text == "scattered clouds")
+                        {
+                            pictureBox5.Image = Properties.Resources.scattered_clouds;
+
+                        }
+                        else
+                        {
+                            pictureBox5.Image = Properties.Resources.broken_clouds;
+
+                        }
+                    }
                     break;
                 case "Rain":
                     if (lbl_Description5.Text == "light intensity shower rain" || lbl_Description5.Text == "shower rain" || lbl_Description5.Text == "heavy intensity shower rain" || lbl_Description5.Text == "ragged shower rain")
                     {
-                        pictureBox4.Image = Properties.Resources.shower_rain;
+                        pictureBox5.Image = Properties.Resources.shower_rain;
                     }
                     else if (lbl_Description5.Text == "freezing rain")
                     {
@@ -402,7 +664,14 @@ namespace BaigiamasisDarbas_Orai_Sergej
                     }
                     else
                     {
-                        pictureBox5.Image = Properties.Resources.rain;
+                        if (DayNight4 == "d")
+                        {
+                            pictureBox5.Image = Properties.Resources.rain;
+                        }
+                        else
+                        {
+                            pictureBox5.Image = Properties.Resources.night_rain;
+                        }
                     }
                     break;
                 case "Thunderstorm ":
@@ -494,7 +763,6 @@ namespace BaigiamasisDarbas_Orai_Sergej
             ChangeIcon3();
             ChangeIcon4();
             ChangeIcon5();
-            CityTable Icons2 = new CityTable();
             string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Pc\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
             SqlConnection sql = new SqlConnection(connectionString);
             string querry = "Insert into IconsTable(Icons) VALUES(@Icons)";
@@ -508,7 +776,6 @@ namespace BaigiamasisDarbas_Orai_Sergej
                 MessageBox.Show("Error");
             }
 
-            MessageBox.Show("New icons saved");
             sql.Close();
 
         }
@@ -521,16 +788,18 @@ namespace BaigiamasisDarbas_Orai_Sergej
             SqlCommand command = new SqlCommand(querry, sql);
             sql.Open();
             var atsakymas = command.ExecuteNonQuery();
+
             if (atsakymas < 0)
             {
                 MessageBox.Show("Error");
             }
             sql.Close();
 
-            MessageBox.Show("OK");
+            IconChangeVar = null;
 
+            getWeather();
+            getForcast();
 
-            StartWithMyCity();
         }
 
         private void EnterButton_Click_1(object sender, EventArgs e)

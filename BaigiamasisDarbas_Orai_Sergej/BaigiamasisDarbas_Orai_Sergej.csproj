@@ -157,6 +157,9 @@
     <None Include="Resources\9.png" />
     <None Include="Resources\6.png" />
     <None Include="Resources\photo-of-blue-sky-912110.jpg" />
+    <None Include="Resources\31.png" />
+    <None Include="Resources\45.png" />
+    <None Include="Resources\27.png" />
     <Content Include="TextFile1.txt" />
   </ItemGroup>
   <ItemGroup>

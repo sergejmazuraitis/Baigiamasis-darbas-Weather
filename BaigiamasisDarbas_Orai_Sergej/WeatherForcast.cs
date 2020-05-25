@@ -8,8 +8,7 @@ namespace BaigiamasisDarbas_Orai_Sergej
 {
     public class WeatherForcast
     {
-       // public city city { get; set; }
-        public List<list> list { get; set; } //numatomu oru prognozes sarašas
+        public List<list> list { get; set; } 
     }
 
     public class weather
@@ -33,9 +32,9 @@ namespace BaigiamasisDarbas_Orai_Sergej
         public double speed { get; set; }
     }
 
-    public class city
+    public class sys
     {
-        public string name { get; set; }
+        public string pod { get; set; }        
     }
 
     public class list
@@ -44,7 +43,7 @@ namespace BaigiamasisDarbas_Orai_Sergej
         public List<weather> weather { get; set; } //oru sarašas
         public main main { get; set; } //
         public wind wind { get; set; } //
-        public city city { get; set; }
+        public sys sys { get; set; }
         public string dt_txt { get; set; }
 
     }

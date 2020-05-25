@@ -153,6 +153,36 @@ namespace BaigiamasisDarbas_Orai_Sergej.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap night_clear_sky {
+            get {
+                object obj = ResourceManager.GetObject("night_clear_sky", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap night_few_clouds {
+            get {
+                object obj = ResourceManager.GetObject("night_few_clouds", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap night_rain {
+            get {
+                object obj = ResourceManager.GetObject("night_rain", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap rain {
             get {
                 object obj = ResourceManager.GetObject("rain", resourceCulture);
