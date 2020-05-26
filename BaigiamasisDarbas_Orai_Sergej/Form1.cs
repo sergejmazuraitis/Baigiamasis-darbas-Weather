@@ -60,7 +60,7 @@ namespace BaigiamasisDarbas_Orai_Sergej
                 lbl_Description1.Text = string.Format("{0}", outPut.weather[0].description);
                 lbl_WindSpeed1.Text = string.Format("{0} km/h", outPut.wind.speed);
 
-                string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Pc\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
+                string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\serge\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
                 SqlConnection sql = new SqlConnection(connectionString);
                 string querry = "SELECT TOP 1 * FROM IconsTable";
                 SqlCommand command = new SqlCommand(querry, sql);
@@ -160,7 +160,7 @@ namespace BaigiamasisDarbas_Orai_Sergej
                 lbl_WindSpeed5.Text = string.Format("{0} km/h", forcast.list[9].wind.speed);
 
 
-                string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Pc\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
+                string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\serge\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
                 SqlConnection sql = new SqlConnection(connectionString);
                 string querry = "SELECT TOP 1 * FROM IconsTable";
                 SqlCommand command = new SqlCommand(querry, sql);
@@ -694,7 +694,7 @@ namespace BaigiamasisDarbas_Orai_Sergej
         {
             CityTable myCity = new CityTable();
             myCity.City = CityText.Text;
-            string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Pc\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
+            string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\serge\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
             SqlConnection sql = new SqlConnection(connectionString);
             string querry = "Insert into CityTable(City) VALUES(@City)";
             SqlCommand command = new SqlCommand(querry, sql);
@@ -713,7 +713,7 @@ namespace BaigiamasisDarbas_Orai_Sergej
 
         private void StartWithMyCity()
         {
-            string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Pc\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
+            string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\serge\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
             SqlConnection sql = new SqlConnection(connectionString);
             string querry = "SELECT TOP 1 * FROM CityTable order by Id DESC";
             SqlCommand command = new SqlCommand(querry, sql);
@@ -763,7 +763,7 @@ namespace BaigiamasisDarbas_Orai_Sergej
             ChangeIcon3();
             ChangeIcon4();
             ChangeIcon5();
-            string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Pc\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
+            string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\serge\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
             SqlConnection sql = new SqlConnection(connectionString);
             string querry = "Insert into IconsTable(Icons) VALUES(@Icons)";
             SqlCommand command = new SqlCommand(querry, sql);
@@ -782,7 +782,7 @@ namespace BaigiamasisDarbas_Orai_Sergej
 
         private void IconButton1_Click(object sender, EventArgs e)
         {
-            string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Pc\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
+            string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\serge\source\repos\BaigiamasisDarbas_Orai_Sergej\BaigiamasisDarbas_Orai_Sergej\City.mdf;Integrated Security=True";
             SqlConnection sql = new SqlConnection(connectionString);
             string querry = "DELETE FROM IconsTable";
             SqlCommand command = new SqlCommand(querry, sql);
@@ -824,6 +824,9 @@ namespace BaigiamasisDarbas_Orai_Sergej
 
         }
 
-
+        private void button1_Click(object sender, EventArgs e)
+        {
+            StartWithMyCity();
+        }
     }
 }

@@ -160,7 +160,6 @@
     <None Include="Resources\31.png" />
     <None Include="Resources\45.png" />
     <None Include="Resources\27.png" />
-    <Content Include="TextFile1.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
